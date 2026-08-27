@@ -1,701 +1,1036 @@
 <!doctype html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lisbon 2026 · iPhone-safe map & photo guide</title>
-<style>
-:root{--bg:#f4efe5;--paper:#fffdf8;--ink:#1e2a27;--muted:#66736f;--line:#ddd2c0;--green:#2d6a4f;--blue:#3a6ea5;--red:#b65349;--yellow:#d6a51e;--shadow:0 12px 32px rgba(0,0,0,.07)}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang HK","Noto Sans TC",Arial,sans-serif;line-height:1.6}
-a{color:inherit}
-.wrap{width:min(1120px,calc(100% - 28px));margin:auto}
-.hero{padding:48px 0 32px;background:linear-gradient(180deg,#203f39,#31594f);color:white}
-.kicker{font-size:.76rem;text-transform:uppercase;letter-spacing:.15em;opacity:.72;font-weight:800}
-h1{font-size:clamp(2.2rem,6vw,4.3rem);line-height:1.02;margin:.3rem 0 .8rem;letter-spacing:-.04em}
-.hero p{max-width:820px;color:#e8efec}
-.hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-top:22px}
-.hero-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);padding:15px;border-radius:16px}
-.nav{position:sticky;top:0;z-index:10;background:rgba(255,253,248,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.nav .wrap{display:flex;gap:8px;overflow:auto;padding:10px 0;scrollbar-width:none}
-.nav a{white-space:nowrap;text-decoration:none;background:white;border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:.82rem;font-weight:800}
-section{padding:40px 0;border-bottom:1px solid var(--line)}
-.section-head{display:grid;grid-template-columns:210px 1fr;gap:22px;margin-bottom:18px}
-.section-head h2{font-size:clamp(1.7rem,3vw,2.5rem);margin:0;letter-spacing:-.03em}
-.section-head p{margin:0;color:var(--muted)}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
-.map-card{display:block;background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;text-decoration:none;box-shadow:var(--shadow)}
-.map-card img{width:100%;display:block;min-height:240px;object-fit:cover;background:#e7e2d7}
-.map-caption{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;font-size:.82rem}
-.map-caption span{color:var(--muted)}
-.callout{border-left:5px solid var(--blue);background:#e9f0f7;border-radius:12px;padding:14px 16px;margin:14px 0}
-.callout.red{border-left-color:var(--red);background:#fae7e4}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:#f2ece1}
-.cluster{padding-top:44px}
-.cluster-head{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:14px}
-.cluster-head h3{font-size:1.85rem;margin:0;letter-spacing:-.025em}
-.cluster-head p{margin:.25rem 0 0;color:var(--muted)}
-.cluster-tag{white-space:nowrap;background:white;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.76rem;font-weight:800}
-.spot-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:17px}
-.spot{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.05)}
-.photo-wrap{display:block;aspect-ratio:16/9;background:#e6ece9;text-decoration:none;overflow:hidden}
-.photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
-.photo-fallback{width:100%;height:100%;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:18px}
-.spot-body{padding:16px}
-.eyebrow{text-transform:uppercase;font-size:.69rem;letter-spacing:.09em;font-weight:900;color:var(--green)}
-.priority{display:inline-block;border-radius:999px;padding:3px 7px;margin-left:5px;font-size:.7rem;letter-spacing:0}
-.priority.must{background:#dcecdf;color:#2b644b}
-.priority.good{background:#e4eef7;color:#355f7f}
-.priority.optional{background:#f3ead1;color:#7d6015}
-h4{font-size:1.23rem;margin:.18rem 0 .55rem;line-height:1.2}
-.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
-.facts div{background:#f6f0e7;padding:8px 9px;border-radius:10px}
-.facts span{display:block;font-size:.66rem;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.05em}
-.facts b{font-size:.87rem}
-.review{font-size:.9rem;color:#46544f}
-.buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.btn{display:inline-block;text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 9px;font-size:.76rem;font-weight:800}
-.btn.primary{background:#203d38;color:white;border-color:#203d38}
-.small{font-size:.84rem;color:var(--muted)}
-.footer{padding:30px 0 60px;color:var(--muted);font-size:.82rem}
-@media(max-width:820px){
- .hero-grid,.grid2,.spot-grid{grid-template-columns:1fr}
- .section-head{grid-template-columns:1fr;gap:7px}
- .cluster-head{display:block}
- .cluster-tag{display:inline-block;margin-top:8px;white-space:normal}
- h1{font-size:2.6rem}
-}
-@media(max-width:430px){.facts{grid-template-columns:1fr}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lisbon Trip Guide</title>
+  <meta name="description" content="A GitHub Pages-ready Lisbon guide with static attraction cards and Leaflet OpenStreetMap maps.">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIINfQPDnrzQ+hmK7t2ATwNERVv+fef9tus="
+    crossorigin=""
+  >
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f4ee;
+      --paper: #fffdf8;
+      --ink: #221f1b;
+      --muted: #6b6257;
+      --line: #ded5c9;
+      --accent: #0e6b64;
+      --accent-dark: #094943;
+      --blue: #236192;
+      --red: #b63b2d;
+      --gold: #a76d16;
+      --green: #4c7a34;
+      --shadow: 0 12px 30px rgba(37, 31, 24, 0.10);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 248, 0.7), rgba(247, 244, 238, 0.96)),
+        var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      line-height: 1.58;
+    }
+
+    a {
+      color: var(--accent-dark);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.94);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 16px;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      color: var(--accent-dark);
+    }
+
+    .hero {
+      padding: 44px 0 26px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 440px);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.12;
+      letter-spacing: 0;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(38px, 7vw, 74px);
+      max-width: 780px;
+    }
+
+    h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 22px;
+    }
+
+    .lede {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 760px;
+      margin: 18px 0 0;
+    }
+
+    .notice {
+      margin-top: 22px;
+      padding: 14px 16px;
+      border: 1px solid rgba(14, 107, 100, 0.22);
+      border-left: 5px solid var(--accent);
+      background: rgba(14, 107, 100, 0.07);
+      border-radius: var(--radius);
+      color: #20413d;
+    }
+
+    .quick-panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .quick-panel h2 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .facts {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .facts li {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .facts li:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    section {
+      padding: 34px 0;
+      border-top: 1px solid rgba(222, 213, 201, 0.7);
+    }
+
+    .section-intro {
+      color: var(--muted);
+      max-width: 820px;
+      margin: 0 0 22px;
+      font-size: 17px;
+    }
+
+    .map-shell {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .leaflet-map {
+      width: 100%;
+      min-height: 380px;
+      background: #e6e1d7;
+      z-index: 1;
+    }
+
+    .cluster-map {
+      min-height: 280px;
+      box-shadow: none;
+    }
+
+    .map-fallback {
+      padding: 14px 16px;
+      background: #fff8e8;
+      border-top: 1px solid var(--line);
+      color: #5b431b;
+      font-size: 14px;
+    }
+
+    .map-ready .map-fallback {
+      display: none;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 253, 248, 0.92);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-right: 6px;
+      vertical-align: -1px;
+      background: var(--accent);
+    }
+
+    .dot.red { background: var(--red); }
+    .dot.blue { background: var(--blue); }
+    .dot.gold { background: var(--gold); }
+    .dot.green { background: var(--green); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .info-card,
+    .attraction {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(37, 31, 24, 0.07);
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .info-card p,
+    .attraction p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .cluster {
+      display: grid;
+      grid-template-columns: minmax(300px, 430px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 22px;
+    }
+
+    .cluster-copy {
+      background: rgba(255, 253, 248, 0.68);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .cluster-copy p {
+      color: var(--muted);
+      margin: 10px 0 0;
+    }
+
+    .route {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(14, 107, 100, 0.08);
+      border: 1px solid rgba(14, 107, 100, 0.18);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .attraction {
+      position: relative;
+      min-height: 220px;
+    }
+
+    .attraction h4 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      line-height: 1.18;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: #eee7dc;
+      color: #463f36;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .badge.must { background: rgba(182, 59, 45, 0.12); color: #8d281d; }
+    .badge.good { background: rgba(14, 107, 100, 0.13); color: var(--accent-dark); }
+    .badge.optional { background: rgba(167, 109, 22, 0.14); color: #744909; }
+    .badge.skip { background: rgba(93, 86, 76, 0.13); color: #4f4942; }
+
+    .details {
+      display: grid;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .details div {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 8px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 13px;
+    }
+
+    .links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+      color: var(--accent-dark);
+      background: #fffaf1;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    footer {
+      padding: 28px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .leaflet-popup-content {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      margin: 10px 12px;
+      color: #221f1b;
+    }
+
+    .popup-title {
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .popup-meta {
+      color: #6b6257;
+      font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid,
+      .cluster {
+        grid-template-columns: 1fr;
+      }
+
+      .grid,
+      .timeline {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .leaflet-map {
+        min-height: 330px;
+      }
+
+      nav {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        width: min(100% - 22px, 1120px);
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 12px 0;
+        min-height: 0;
+      }
+
+      .hero {
+        padding-top: 30px;
+      }
+
+      .grid,
+      .timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .facts li,
+      .details div {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .leaflet-map {
+        min-height: 310px;
+      }
+    }
+  </style>
 </head>
 <body>
-<header class="hero"><div class="wrap">
-<div class="kicker">iPhone-safe · no JavaScript required</div>
-<h1>Lisbon 地圖＋景點相片指南</h1>
-<p>呢版專門修正 iPhone HTML 預覽問題：<strong>所有內容係靜態 HTML</strong>，唔需要 JavaScript 先出現。地圖同相片只係普通網上圖片，所以即使 iOS 封鎖 script，cluster、景點資訊、相片同 map preview 都唔會消失。</p>
-<div class="hero-grid">
-<div class="hero-card"><b>住宿</b><br>41 Rua do Alvito, 1300-059 Lisboa · Alvito / Alcântara 山坡</div>
-<div class="hero-card"><b>行程骨架</b><br>27 下午 · 28/29 full days · 30 下午 FlixBus 去 Porto</div>
-</div>
-</div></header>
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">Lisbon Trip Guide</div>
+      <nav aria-label="Page sections">
+        <a href="#overview">地圖</a>
+        <a href="#terrain">地形</a>
+        <a href="#transport">交通</a>
+        <a href="#clusters">景點區域</a>
+        <a href="#plan">27-30 Aug</a>
+      </nav>
+    </div>
+  </header>
 
-<nav class="nav"><div class="wrap">
-<a href="#overview">總覽</a><a href="#transport">交通</a><a href="#passes">Pass / 買飛</a>
-<a href="#clusters">Clusters</a><a href="#notes">使用說明</a>
-</div></nav>
-
-<main>
-<section id="overview"><div class="wrap">
-<div class="section-head"><h2>01 · 全市總覽</h2><p>Lisbon 河岸由 Belém → Alcântara → Cais do Sodré → Baixa 相對平；Chiado、Castelo、Alfama、Graça 就係向山上走。你住喺 Alcântara 上面，所以西面景點近，但返 apartment 通常要上斜。</p></div>
-<a class="map-card" href="https://www.google.com/maps/search/?api=1&query=Lisbon%2C%20Portugal" target="_blank">
-<img src="https://staticmap.openstreetmap.de/staticmap.php?center=38.7085,-9.165&zoom=12&size=1000x520&maptype=mapnik&markers=38.7077,-9.1807,red-pushpin|38.70196,-9.17837,red-pushpin|38.7071,-9.199,red-pushpin|38.6979,-9.2067,red-pushpin|38.6916,-9.2159,red-pushpin|38.6936,-9.2056,red-pushpin|38.6951,-9.1946,red-pushpin|38.6977,-9.2036,red-pushpin|38.7079,-9.1366,red-pushpin|38.708,-9.1361,red-pushpin|38.7127,-9.1408,red-pushpin|38.71524,-9.14418,red-pushpin|38.7139,-9.1335,red-pushpin|38.7118,-9.1294,red-pushpin|38.7114,-9.1294,red-pushpin|38.7097,-9.1327,red-pushpin|38.7149,-9.1286,red-pushpin|38.71894,-9.13277,red-pushpin" alt="Lisbon overview map">
-<div class="map-caption"><b>Lisbon 全市景點概念地圖</b><span>撳圖開 Google Maps</span></div>
-</a>
-<div class="callout"><b>你最應該記住：</b>Belém / Alcântara 可以當一個西面世界；Baixa/Chiado 係中段；Castelo/Alfama/Graça 係東面山丘。東面最好搭 737 上 Castelo，然後一路行落山。</div>
-</div></section>
-
-<section id="transport"><div class="wrap">
-<div class="section-head"><h2>02 · 交通</h2><p>主要用 CARRIS bus/tram + Metro。Metro 入閘同出閘都要用同一張卡/同一部裝置；bus/tram 通常上車拍卡一次，落車唔使拍。</p></div>
-<div class="grid2">
-<div class="card">
-<h3>你最有用四條線</h3>
-<table>
-<tr><th>線</th><th>用途</th></tr>
-<tr><td><b>724</b></td><td>Bairro do Alvito → Alcântara；你 apartment 落河邊 feeder。</td></tr>
-<tr><td><b>15E</b></td><td>Belém / MAAT / Alcântara / Cais do Sodré / Comércio / Figueira。</td></tr>
-<tr><td><b>18E</b></td><td>Cais do Sodré ↔ Ajuda，去 Palace 有用。</td></tr>
-<tr><td><b>737</b></td><td>Praça da Figueira → Castelo；幫你慳最辛苦嗰段上山。</td></tr>
-</table>
-</div>
-<div class="card">
-<h3>2026 常用票價</h3>
-<table>
-<tr><td>Occasional Navegante 卡</td><td><b>€0.50</b></td></tr>
-<tr><td>CARRIS/Metro 60-min</td><td><b>€1.90</b></td></tr>
-<tr><td>Zapping</td><td><b>€1.72 起</b></td></tr>
-<tr><td>24h CARRIS + Metro</td><td><b>€7.25</b></td></tr>
-<tr><td>Metro contactless</td><td><b>€1.92</b></td></tr>
-<tr><td>Bus onboard</td><td><b>€2.30</b></td></tr>
-<tr><td>Tram onboard</td><td><b>€3.30</b></td></tr>
-</table>
-<p class="small">一日 2–3 段通常 pay-as-you-go；約 4–5 段以上，24h pass 開始容易抵。</p>
-</div></div>
-</div></section>
-
-<section id="passes"><div class="wrap">
-<div class="section-head"><h2>03 · Pass / 買飛</h2><p>你今次最重要係保障高需求景點嘅 slot，而唔係先買一張 city card 再算。</p></div>
-<div class="grid2">
-<div class="card"><h3>優先買</h3><p><b>Jerónimos：</b>旺季 timed slot，建議先鎖。<br><b>Belém Tower：</b>只係你好想入內先鎖。<br><b>São Jorge Castle：</b>online 買可慳售票隊。</p></div>
-<div class="card"><h3>Lisboa Card</h3><p>理論上景點多就容易回本，但 Jerónimos / Belém Tower 嘅 card-holder reservation 有 allocation 問題。</p><div class="callout red"><b>你今次：</b>Jerónimos 如果係必去，我會直接買 timed ticket，唔建議為咗理論上免費而冒 slot risk。</div></div>
-</div>
-</div></section>
-
-<section id="clusters"><div class="wrap">
-<div class="section-head"><h2>04 · Clusters + 地圖 + 相片</h2><p>以下全部都係 HTML 本身已經存在嘅內容，唔靠 script 生成。每區先有 map preview，之後每個景點一張相片 + 地址 + 開放時間 + 入場 + 評價摘要。</p></div>
-
-    <section class="cluster" id="Bel%C3%A9m">
-      <div class="cluster-head">
+  <main>
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
         <div>
-          <h3>Belém</h3>
-          <p>航海史核心；河岸相對平坦。</p>
+          <h1>Lisbon 27-30 Aug</h1>
+          <p class="lede">以 Alvito / Alcantara 做基地，將 Lisbon 拆成 Belém、Baixa/Chiado、Alfama/Castelo/Graca 同住宿附近四組。地圖用 Leaflet + OpenStreetMap；所有景點卡都係靜態 HTML，所以就算地圖 script 載入失敗，內容都仍然會完整顯示。</p>
+          <div class="notice">
+            Public GitHub Pages safety: 住宿只寫 Alvito / Alcantara 大區，不放完整門牌地址。
+          </div>
         </div>
-        <span class="cluster-tag">15E · CP Belém · 河岸步行</span>
+        <aside class="quick-panel" aria-labelledby="quick-title">
+          <h2 id="quick-title">最重要決定</h2>
+          <ul class="facts">
+            <li><span class="label">必去</span><span>Jerónimos、Belém 河邊、Praça do Comércio、Carmo、Castelo、Alfama miradouros</span></li>
+            <li><span class="label">可 skip</span><span>Santa Justa Lift、Pink Street、專登排長龍坐完整 Tram 28</span></li>
+            <li><span class="label">買飛</span><span>Jerónimos / Belém Tower 入內要早買；Castle 建議 online；其他多數 walk-in</span></li>
+            <li><span class="label">策略</span><span>先搭車上山，再一路行落山，慳腳力</span></li>
+          </ul>
+        </aside>
       </div>
-      <a class="map-card" href="https://www.openstreetmap.org/#map=14/38.696/-9.2045" target="_blank">
-        <img src="https://staticmap.openstreetmap.de/staticmap.php?center=38.696,-9.2045&zoom=14&size=900x440&maptype=mapnik&markers=38.6979,-9.2067,red-pushpin|38.6916,-9.2159,red-pushpin|38.6936,-9.2056,red-pushpin|38.6951,-9.1946,red-pushpin|38.6977,-9.2036,red-pushpin" alt="Belém map" loading="lazy">
-        <div class="map-caption"><b>Belém 地圖</b><span>撳圖開 OpenStreetMap</span></div>
-      </a>
-      <div class="spot-grid">
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:The_Jer%C3%B3nimos_Monastery_or_Hieronymites_Monastery.png" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/The%20Jer%C3%B3nimos%20Monastery%20or%20Hieronymites%20Monastery.png?width=1000" alt="Jerónimos Monastery" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Belém
-          <span class="priority must">必去</span>
-        </div>
-        <h4>Jerónimos Monastery</h4>
-        <p>Manueline 建築代表作，葡萄牙航海時代最重要 monument 之一。</p>
-        <p><strong>點解值得：</strong>Belém 只入一個付費內部，我會揀呢個；真正重點係 cloister。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Praça do Império, 1400-206 Lisboa</b></div>
-          <div><span>開放</span><b>Tue–Sun 09:30–17:30；Mon closed</b></div>
-          <div><span>入場</span><b>€18（cloister）；教堂免費</b></div>
-          <div><span>預約</span><b>🔴 預先訂 timed slot</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>建築幾乎一致高評；最大負評係旺季排隊同人流管理。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Pra%C3%A7a%20do%20Imp%C3%A9rio%2C%201400-206%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.museusemonumentos.pt/en/museus-e-monumentos/mosteiro-dos-jeronimos-e-capela-de-sao-jeronimo" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:The_Jer%C3%B3nimos_Monastery_or_Hieronymites_Monastery.png" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Jer%C3%B3nimos%20Monastery%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Bel%C3%A9m_Tower_in_Lisbon,_Portugal.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Bel%C3%A9m%20Tower%20in%20Lisbon,%20Portugal.jpg?width=1000" alt="Belém Tower" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Belém
-          <span class="priority optional">可選</span>
-        </div>
-        <h4>Belém Tower</h4>
-        <p>16 世紀河口防禦塔，Lisbon 最 iconic 建築之一。</p>
-        <p><strong>點解值得：</strong>外觀同河岸位置必睇；內部相對細，除非你好鍾意 fortification。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Av. Brasília, 1400-038 Lisboa</b></div>
-          <div><span>開放</span><b>Tue–Sun 09:00–17:30；Mon closed</b></div>
-          <div><span>入場</span><b>€15</b></div>
-          <div><span>預約</span><b>🔴 入內要 slot；外觀免費</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>外面『已經睇到最靚部分』係非常常見意見。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Av.%20Bras%C3%ADlia%2C%201400-038%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.museusemonumentos.pt/en/museus-e-monumentos/torre-de-belem" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Bel%C3%A9m_Tower_in_Lisbon,_Portugal.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Bel%C3%A9m%20Tower%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Padr%C3%A3o_dos_Descobrimentos,_Lisboa.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Padr%C3%A3o%20dos%20Descobrimentos,%20Lisboa.jpg?width=1000" alt="Padrão dos Descobrimentos" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Belém
-          <span class="priority optional">可選</span>
-        </div>
-        <h4>Padrão dos Descobrimentos</h4>
-        <p>以船首造型呈現葡萄牙航海人物嘅發現者紀念碑。</p>
-        <p><strong>點解值得：</strong>基本上順路必經；外觀已值得，上塔主要係為 view。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Av. Brasília, 1400-038 Lisboa</b></div>
-          <div><span>開放</span><b>夏季一般 10:00–19:00</b></div>
-          <div><span>入場</span><b>€10</b></div>
-          <div><span>預約</span><b>通常 walk-in</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>外觀普遍值得；『值唔值得上去』較視乎你有冇其他觀景台。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Av.%20Bras%C3%ADlia%2C%201400-038%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://padraodosdescobrimentos.pt/en/tickets/" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Padr%C3%A3o_dos_Descobrimentos,_Lisboa.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Padr%C3%A3o%20dos%20Descobrimentos%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:MAAT.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/MAAT.jpg?width=1000" alt="MAAT" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Belém
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>MAAT</h4>
-        <p>Museum of Art, Architecture and Technology；新館本身就係景點。</p>
-        <p><strong>點解值得：</strong>河岸建築好靚，而且你 28 Aug 仲碰到 summer Happy Hour。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Av. Brasília, Belém, 1300-598 Lisboa</b></div>
-          <div><span>開放</span><b>Wed–Mon 10:00–19:00；Tue closed</b></div>
-          <div><span>入場</span><b>€16；Happy Hour €8</b></div>
-          <div><span>預約</span><b>可即場 / online</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>建築同河岸公共空間評價很穩；展覽就睇當期。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Av.%20Bras%C3%ADlia%2C%20Bel%C3%A9m%2C%201300-598%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://maat.pt/en/plan-a-visit" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:MAAT.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=MAAT%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Pasteis_de_Belem.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Pasteis%20de%20Belem.jpg?width=1000" alt="Pastéis de Belém" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Belém
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>Pastéis de Belém</h4>
-        <p>1837 起沿用秘密配方製作嘅原店蛋撻。</p>
-        <p><strong>點解值得：</strong>Jerónimos 隔離，零 detour；食一件當 Belém ritual 幾合理。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Rua de Belém 84–92, 1300-085 Lisboa</b></div>
-          <div><span>開放</span><b>Jul–Sep 每日 08:00–22:00</b></div>
-          <div><span>入場</span><b>按件消費</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>口碑長期高；高峰時排隊，但內部座位其實不少。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Rua%20de%20Bel%C3%A9m%2084%E2%80%9392%2C%201300-085%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://pasteisdebelem.pt/en/contact/" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Pasteis_de_Belem.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Past%C3%A9is%20de%20Bel%C3%A9m%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article></div>
     </section>
-    
-    <section class="cluster" id="Baixa%20/%20Chiado">
-      <div class="cluster-head">
-        <div>
-          <h3>Baixa / Chiado</h3>
-          <p>Baixa 低地 + Chiado 西面山坡。</p>
-        </div>
-        <span class="cluster-tag">Baixa-Chiado Metro · 15E · 步行</span>
-      </div>
-      <a class="map-card" href="https://www.openstreetmap.org/#map=15/38.7117/-9.1407" target="_blank">
-        <img src="https://staticmap.openstreetmap.de/staticmap.php?center=38.7117,-9.1407&zoom=15&size=900x440&maptype=mapnik&markers=38.7079,-9.1366,red-pushpin|38.708,-9.1361,red-pushpin|38.7127,-9.1408,red-pushpin|38.71524,-9.14418,red-pushpin" alt="Baixa / Chiado map" loading="lazy">
-        <div class="map-caption"><b>Baixa / Chiado 地圖</b><span>撳圖開 OpenStreetMap</span></div>
-      </a>
-      <div class="spot-grid">
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Lisbon_(36211708233)_(cropped).jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Lisbon%20(36211708233)%20(cropped).jpg?width=1000" alt="Praça do Comércio" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Baixa / Chiado
-          <span class="priority must">必去</span>
-        </div>
-        <h4>Praça do Comércio</h4>
-        <p>1755 地震後重建嘅河岸大廣場，Baixa 最重要 urban space。</p>
-        <p><strong>點解值得：</strong>係理解河岸、Rua Augusta 軸線同 Pombaline Lisbon 嘅最佳起點。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Praça do Comércio, 1100 Lisboa</b></div>
-          <div><span>開放</span><b>戶外全天</b></div>
-          <div><span>入場</span><b>免費</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>第一次去幾乎必到；主要負評係周邊部分餐廳 tourist pricing。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Pra%C3%A7a%20do%20Com%C3%A9rcio%2C%201100%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/praca-do-comercio-terreiro-do-paco" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Lisbon_(36211708233)_(cropped).jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Pra%C3%A7a%20do%20Com%C3%A9rcio%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
 
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Arco_Triunfal_da_Rua_Augusta,_Plaza_del_Comercio,_Lisboa,_Portugal,_2012-05-12,_DD_02.JPG" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Arco%20Triunfal%20da%20Rua%20Augusta,%20Plaza%20del%20Comercio,%20Lisboa,%20Portugal,%202012-05-12,%20DD%2002.JPG?width=1000" alt="Arco da Rua Augusta" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Baixa / Chiado
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>Arco da Rua Augusta</h4>
-        <p>連接 Praça do Comércio 同 Rua Augusta 嘅凱旋門。</p>
-        <p><strong>點解值得：</strong>平價、參觀短、360° view 好完整。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Rua Augusta 2, 1100-053 Lisboa</b></div>
-          <div><span>開放</span><b>日間一般開放；當日確認</b></div>
-          <div><span>入場</span><b>約 €5</b></div>
-          <div><span>預約</span><b>通常 walk-in</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>性價比同 view 經常被讚，適合 20–30 分鐘 stop。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Rua%20Augusta%202%2C%201100-053%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/arco-da-rua-augusta" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Arco_Triunfal_da_Rua_Augusta,_Plaza_del_Comercio,_Lisboa,_Portugal,_2012-05-12,_DD_02.JPG" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Arco%20da%20Rua%20Augusta%20Lisbon" target="_blank">更多相片</a>
+    <section id="overview">
+      <div class="wrap">
+        <h2>Lisbon Overview Map</h2>
+        <p class="section-intro">如果地圖正常載入，你會見到所有景點 marker。若 Safari / CDN 暫時載不到，下面每個 cluster 同景點卡仍然照常顯示，並保留 Google Maps 連結。</p>
+        <div class="map-shell">
+          <div id="overview-map" class="leaflet-map" data-map="overview" role="img" aria-label="Lisbon overview interactive map"></div>
+          <div class="map-fallback">
+            地圖未載入時可直接開：
+            <a href="https://www.openstreetmap.org/#map=13/38.7146/-9.1550" target="_blank" rel="noopener">OpenStreetMap Lisbon overview</a>
+          </div>
+          <div class="legend" aria-label="Map legend">
+            <span><span class="dot red"></span>必去</span>
+            <span><span class="dot"></span>推薦</span>
+            <span><span class="dot gold"></span>可選</span>
+            <span><span class="dot blue"></span>交通 / 住宿</span>
+          </div>
         </div>
       </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Lisbon09.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Lisbon09.jpg?width=1000" alt="Carmo Convent" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Baixa / Chiado
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>Carmo Convent</h4>
-        <p>1755 地震留下嘅無頂 Gothic 教堂遺址。</p>
-        <p><strong>點解值得：</strong>可以直接用空間感理解地震點樣改寫 Lisbon；而且唔食時間。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Largo do Carmo, 1200-092 Lisboa</b></div>
-          <div><span>開放</span><b>May–Oct Mon–Sat 10:00–19:00；Sun closed</b></div>
-          <div><span>入場</span><b>€7</b></div>
-          <div><span>預約</span><b>walk-in</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>『無頂 Gothic ruins 氣氛好』係最常見評價。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Largo%20do%20Carmo%2C%201200-092%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.museuarqueologicodocarmo.pt/info_en.html" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Lisbon09.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Carmo%20Convent%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Lisbon-MiradouroSPedroAlcantara.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Lisbon-MiradouroSPedroAlcantara.jpg?width=1000" alt="São Pedro de Alcântara viewpoint" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Baixa / Chiado
-          <span class="priority must">必去</span>
-        </div>
-        <h4>São Pedro de Alcântara viewpoint</h4>
-        <p>由 Bairro Alto 高位望向 Castelo、Baixa、東面山丘。</p>
-        <p><strong>點解值得：</strong>係最好嘅城市 orientation point 之一；黃昏尤其靚。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Rua de São Pedro de Alcântara, Lisboa</b></div>
-          <div><span>開放</span><b>戶外全天</b></div>
-          <div><span>入場</span><b>免費</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>視野闊、位置方便；唯一缺點係黃昏多人。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Rua%20de%20S%C3%A3o%20Pedro%20de%20Alc%C3%A2ntara%2C%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/miradouro-de-s-pedro-de-alcantara" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Lisbon-MiradouroSPedroAlcantara.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=S%C3%A3o%20Pedro%20de%20Alc%C3%A2ntara%20viewpoint%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article></div>
     </section>
-    
-    <section class="cluster" id="Alfama%20/%20Castelo%20/%20Gra%C3%A7a">
-      <div class="cluster-head">
-        <div>
-          <h3>Alfama / Castelo / Graça</h3>
-          <p>最典型 Lisbon 舊城山坡；建議上山後落山玩。</p>
-        </div>
-        <span class="cluster-tag">737 上 Castelo · 28E 附近 · 步行</span>
-      </div>
-      <a class="map-card" href="https://www.openstreetmap.org/#map=15/38.714/-9.132" target="_blank">
-        <img src="https://staticmap.openstreetmap.de/staticmap.php?center=38.714,-9.132&zoom=15&size=900x440&maptype=mapnik&markers=38.7139,-9.1335,red-pushpin|38.7118,-9.1294,red-pushpin|38.7114,-9.1294,red-pushpin|38.7097,-9.1327,red-pushpin|38.7149,-9.1286,red-pushpin|38.71894,-9.13277,red-pushpin" alt="Alfama / Castelo / Graça map" loading="lazy">
-        <div class="map-caption"><b>Alfama / Castelo / Graça 地圖</b><span>撳圖開 OpenStreetMap</span></div>
-      </a>
-      <div class="spot-grid">
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:LisbonCastle.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/LisbonCastle.jpg?width=1000" alt="São Jorge Castle" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alfama / Castelo / Graça
-          <span class="priority must">必去</span>
-        </div>
-        <h4>São Jorge Castle</h4>
-        <p>里斯本最標誌性山頂城堡。</p>
-        <p><strong>點解值得：</strong>重點係地理位置同城市景觀；先搭車上去，再一路落山最舒服。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Rua de Santa Cruz do Castelo, 1100-129 Lisboa</b></div>
-          <div><span>開放</span><b>Mar–Oct 每日 09:00–21:00</b></div>
-          <div><span>入場</span><b>€17</b></div>
-          <div><span>預約</span><b>🟠 建議 online</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>『views alone are worth it』係最常見結論；票價同上山係主要負評。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Rua%20de%20Santa%20Cruz%20do%20Castelo%2C%201100-129%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://castelodesaojorge.pt/en/plan-your-visit/choose-your-ticket/" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:LisbonCastle.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=S%C3%A3o%20Jorge%20Castle%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
 
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Miradouro_de_portas_do_sol.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Miradouro%20de%20portas%20do%20sol.jpg?width=1000" alt="Portas do Sol" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alfama / Castelo / Graça
-          <span class="priority must">必去</span>
-        </div>
-        <h4>Portas do Sol</h4>
-        <p>Alfama 最開揚嘅經典觀景台之一。</p>
-        <p><strong>點解值得：</strong>同 Santa Luzia 相隔幾分鐘，可以一齊睇；view 更開揚。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Largo Portas do Sol, Lisboa</b></div>
-          <div><span>開放</span><b>戶外全天</b></div>
-          <div><span>入場</span><b>免費</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>幾乎必到；主要缺點只係人多。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Largo%20Portas%20do%20Sol%2C%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/miradouro-das-portas-do-sol" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Miradouro_de_portas_do_sol.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Portas%20do%20Sol%20Lisbon" target="_blank">更多相片</a>
+    <section id="terrain">
+      <div class="wrap">
+        <h2>地形概念</h2>
+        <p class="section-intro">Lisbon 唔係平地城市。南面係 Tagus 河，Baixa 係低地，Chiado / Bairro Alto 向西上山，Alfama / Castelo / Graca 向東上山。住 Alvito / Alcantara 即係偏西、近 Belém，但回家最後一段多數會上斜。</p>
+        <div class="grid">
+          <article class="info-card">
+            <strong>Belém / Alcantara</strong>
+            <p>河邊較平，適合排同一日慢慢行。你住得近，27 號到步後可以輕鬆去 LX Factory 或 MAAT。</p>
+          </article>
+          <article class="info-card">
+            <strong>Baixa / Chiado</strong>
+            <p>市中心低地接上山區。Praça do Comércio、Rua Augusta、Rossio、Carmo、Chiado 可以串成一條自然 walking route。</p>
+          </article>
+          <article class="info-card">
+            <strong>Alfama / Castelo / Graca</strong>
+            <p>最有 Lisbon 感，但多斜路石路。建議早上先去 Castle 或高位，再一路行落 Alfama。</p>
+          </article>
         </div>
       </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Miradouro_de_Santa_Luzia.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Miradouro%20de%20Santa%20Luzia.jpg?width=1000" alt="Miradouro de Santa Luzia" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alfama / Castelo / Graça
-          <span class="priority must">必去</span>
-        </div>
-        <h4>Miradouro de Santa Luzia</h4>
-        <p>花架、瓷磚、Alfama 紅瓦屋頂同 Tagus 一次過齊。</p>
-        <p><strong>點解值得：</strong>最有『Lisbon postcard』感嘅免費景點之一。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Largo de Santa Luzia, Lisboa</b></div>
-          <div><span>開放</span><b>戶外全天</b></div>
-          <div><span>入場</span><b>免費</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>景觀同場景都高分；高峰時較迫。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Largo%20de%20Santa%20Luzia%2C%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/miradouro-de-santa-luzia" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Miradouro_de_Santa_Luzia.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Miradouro%20de%20Santa%20Luzia%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Catedral,_Lisboa,_Portugal,_2022-07-24,_DD_24.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Catedral,%20Lisboa,%20Portugal,%202022-07-24,%20DD%2024.jpg?width=1000" alt="Sé de Lisboa" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alfama / Castelo / Graça
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>Sé de Lisboa</h4>
-        <p>12 世紀起源、fortress-like Romanesque 主教座堂。</p>
-        <p><strong>點解值得：</strong>由 Castelo 落山去 Baixa 幾乎必經，順路價值好高。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Largo da Sé 1, 1100-585 Lisboa</b></div>
-          <div><span>開放</span><b>Mon/Tue/Thu/Fri 09:30–19:00；Wed/Sat 10:00–18:00；Sun closed</b></div>
-          <div><span>入場</span><b>約 €7 級別付費範圍</b></div>
-          <div><span>預約</span><b>通常 walk-in</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>歷史價值高；多數人覺得順路睇最合理。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Largo%20da%20S%C3%A9%201%2C%201100-585%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/se-catedral-cathedral" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Catedral,_Lisboa,_Portugal,_2022-07-24,_DD_24.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=S%C3%A9%20de%20Lisboa%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Monastery_of_Sao_Vicente_de_Fora.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Monastery%20of%20Sao%20Vicente%20de%20Fora.jpg?width=1000" alt="São Vicente de Fora" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alfama / Castelo / Graça
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>São Vicente de Fora</h4>
-        <p>大型修道院，入面有 azulejos、cloister、royal pantheon 同 rooftop。</p>
-        <p><strong>點解值得：</strong>名氣低過 Jerónimos，但內容豐富、人流通常少好多。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Largo de São Vicente, 1100-472 Lisboa</b></div>
-          <div><span>開放</span><b>夏季一般每日 10:00–19:00</b></div>
-          <div><span>入場</span><b>€8</b></div>
-          <div><span>預約</span><b>walk-in</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>『人少而精彩』係常見評價；rooftop 同瓷磚很受讚。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Largo%20de%20S%C3%A3o%20Vicente%2C%201100-472%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://mosteirodesaovicentedefora.com/en/planning-the-visit/" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Monastery_of_Sao_Vicente_de_Fora.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=S%C3%A3o%20Vicente%20de%20Fora%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
-
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Miradouro_da_Senhora_do_Monte.jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Miradouro%20da%20Senhora%20do%20Monte.jpg?width=1000" alt="Senhora do Monte viewpoint" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alfama / Castelo / Graça
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>Senhora do Monte viewpoint</h4>
-        <p>Graça 上方高位 miradouro，俯瞰整個 Lisbon bowl。</p>
-        <p><strong>點解值得：</strong>如果仲有腳力，呢度常被評為全城最靚大景之一。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Rua da Senhora do Monte, Lisboa</b></div>
-          <div><span>開放</span><b>戶外全天</b></div>
-          <div><span>入場</span><b>免費</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>超高口碑；真正成本係爬坡。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Rua%20da%20Senhora%20do%20Monte%2C%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.visitlisboa.com/en/places/miradouro-da-senhora-do-monte" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Miradouro_da_Senhora_do_Monte.jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Senhora%20do%20Monte%20viewpoint%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article></div>
     </section>
-    
-    <section class="cluster" id="Alvito%20/%20Alc%C3%A2ntara%20/%20Ajuda">
-      <div class="cluster-head">
-        <div>
-          <h3>Alvito / Alcântara / Ajuda</h3>
-          <p>你住宿附近；返屋企最後一段係上斜。</p>
-        </div>
-        <span class="cluster-tag">724 → Alcântara · 18E → Ajuda · Bolt/Uber</span>
-      </div>
-      <a class="map-card" href="https://www.openstreetmap.org/#map=14/38.705/-9.187" target="_blank">
-        <img src="https://staticmap.openstreetmap.de/staticmap.php?center=38.705,-9.187&zoom=14&size=900x440&maptype=mapnik&markers=38.70196,-9.17837,red-pushpin|38.7071,-9.199,red-pushpin" alt="Alvito / Alcântara / Ajuda map" loading="lazy">
-        <div class="map-caption"><b>Alvito / Alcântara / Ajuda 地圖</b><span>撳圖開 OpenStreetMap</span></div>
-      </a>
-      <div class="spot-grid">
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:LX_Factory_Lisbon_(44353483285).jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/LX%20Factory%20Lisbon%20(44353483285).jpg?width=1000" alt="LX Factory" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alvito / Alcântara / Ajuda
-          <span class="priority good">推薦</span>
-        </div>
-        <h4>LX Factory</h4>
-        <p>舊工業區活化成書店、餐廳、設計店、酒吧同 creative space。</p>
-        <p><strong>點解值得：</strong>你住得近，最適合 arrival day / 30 號半日；對你嚟講成本極低。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Rua Rodrigues de Faria 103, 1300-501 Lisboa</b></div>
-          <div><span>開放</span><b>各店不一</b></div>
-          <div><span>入場</span><b>免費入區</b></div>
-          <div><span>預約</span><b>唔需要</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>氣氛、Ler Devagar、street art 常被讚；缺點係偏 touristy。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Rua%20Rodrigues%20de%20Faria%20103%2C%201300-501%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://lxfactory.com/en/" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:LX_Factory_Lisbon_(44353483285).jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=LX%20Factory%20Lisbon" target="_blank">更多相片</a>
-        </div>
-      </div>
-    </article>
 
-    <article class="spot">
-      <a class="photo-wrap" href="https://commons.wikimedia.org/wiki/File:Pal%C3%A1cio_Nacional_da_Ajuda_-_Lisboa_-_Portugal_%F0%9F%87%B5%F0%9F%87%B9_(53719719468).jpg" target="_blank" rel="noopener">
-        <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Pal%C3%A1cio%20Nacional%20da%20Ajuda%20-%20Lisboa%20-%20Portugal%20%F0%9F%87%B5%F0%9F%87%B9%20(53719719468).jpg?width=1000" alt="Ajuda National Palace" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="photo-fallback" style="display:none">相片載入唔到<br>撳呢度去 Wikimedia 睇</div>
-      </a>
-      <div class="spot-body">
-        <div class="eyebrow">Alvito / Alcântara / Ajuda
-          <span class="priority optional">可選</span>
-        </div>
-        <h4>Ajuda National Palace</h4>
-        <p>葡萄牙王室 19 世紀宮殿，室內保留大量 royal interiors。</p>
-        <p><strong>點解值得：</strong>如果 30 號朝早唔想跨城，呢個係最就腳嘅正式景點。</p>
-        <div class="facts">
-          <div><span>地址</span><b>Largo da Ajuda, 1349-021 Lisboa</b></div>
-          <div><span>開放</span><b>Thu–Tue 10:00–18:00；Wed closed</b></div>
-          <div><span>入場</span><b>€15</b></div>
-          <div><span>預約</span><b>通常 walk-in</b></div>
-        </div>
-        <p class="review"><strong>網上評價：</strong>內部比外觀看落更豐富；對 royal interiors 有興趣就幾值。</p>
-        <div class="buttons">
-          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=Largo%20da%20Ajuda%2C%201349-021%20Lisboa" target="_blank">Google Maps</a>
-          <a class="btn" href="https://www.palacioajuda.gov.pt/en/pages/118103a3" target="_blank">官方頁</a>
-          <a class="btn" href="https://commons.wikimedia.org/wiki/File:Pal%C3%A1cio_Nacional_da_Ajuda_-_Lisboa_-_Portugal_%F0%9F%87%B5%F0%9F%87%B9_(53719719468).jpg" target="_blank">相片來源</a>
-          <a class="btn" href="https://www.google.com/search?tbm=isch&q=Ajuda%20National%20Palace%20Lisbon" target="_blank">更多相片</a>
+    <section id="transport">
+      <div class="wrap">
+        <h2>交通點用</h2>
+        <p class="section-intro">Lisbon 交通由 Metro、tram、bus、train、ferry 組成。遊客最常用係 contactless bank card / Viva Viagem / Navegante occasional card / 24h pass。票價同 pass 規則會變，正式買之前睇一次官方資料。</p>
+        <div class="grid">
+          <article class="info-card">
+            <strong>上車付款</strong>
+            <p>Metro 入閘 tap；bus / tram 通常上車 tap。迫 tram 要小心手機同銀包，特別係 Tram 28 同熱門景點站。</p>
+          </article>
+          <article class="info-card">
+            <strong>幾時買 24h pass</strong>
+            <p>如果同一日會多次搭 Metro / bus / tram，24h pass 先容易抵。只搭一兩程就用單程或 zapping 比較簡單。</p>
+          </article>
+          <article class="info-card">
+            <strong>你住 Alvito 的路線</strong>
+            <p>西面玩 Belém / Alcantara 很順。去市中心多數先落 Alcantara / Cais do Sodré，再接 tram、train 或 Metro。</p>
+          </article>
         </div>
       </div>
-    </article></div>
     </section>
-    
-</div></section>
 
-<section id="notes"><div class="wrap">
-<div class="section-head"><h2>05 · 使用說明</h2><p>呢個版本係為 iPhone 內置 HTML 預覽器而設。地圖係 OpenStreetMap static preview；撳圖或 Google Maps button 就會跳去真正 live map。相片來自 Wikimedia Commons，撳圖可以睇原檔與授權資料。</p></div>
-<div class="card">
-<b>如果你仍然見到某張 map / photo 空白：</b>
-<p class="small">嗰樣只代表該外部圖片 host 被當時網絡/預覽器擋咗；景點卡內容本身仍會喺度。用「Google Maps」或「相片來源」按鈕可以直接打開。呢版唔會再因為一個 script fail 而令成個 cluster 消失。</p>
-</div>
-</div></section>
-</main>
+    <section id="clusters">
+      <div class="wrap">
+        <h2>景點 Cluster</h2>
+        <p class="section-intro">每組都有一張 Leaflet 小地圖。如果地圖沒有載入，景點資料不受影響。</p>
 
-<footer class="footer"><div class="wrap">Lisbon 2026 · iPhone-safe version · generated 27 Aug 2026</div></footer>
-</body></html>
+        <article class="cluster" id="belem">
+          <div class="cluster-copy">
+            <h3>1. Belém</h3>
+            <p>葡萄牙航海時代、Manueline 建築、河邊 monument 集中地。適合 28 號朝早第一批去 Jerónimos，再沿河行去 Belém Tower。</p>
+            <div class="route">
+              <span class="pill">15E tram</span>
+              <span class="pill">Train to Belém</span>
+              <span class="pill">平路河邊 walk</span>
+            </div>
+            <div class="map-shell" style="margin-top: 16px;">
+              <div id="map-belem" class="leaflet-map cluster-map" data-map="belem" role="img" aria-label="Belem interactive map"></div>
+              <div class="map-fallback"><a href="https://www.openstreetmap.org/#map=15/38.6970/-9.2050" target="_blank" rel="noopener">Open Belém on OpenStreetMap</a></div>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="attraction" data-cluster="belem" data-title="Jerónimos Monastery" data-lat="38.6979" data-lng="-9.2068" data-priority="must">
+              <div class="badge-row"><span class="badge must">必去</span><span class="badge">建議預先買</span></div>
+              <h4>Jerónimos Monastery</h4>
+              <p>Lisbon 最代表性的 Manueline 建築之一。最值得看的是 cloister；教堂外觀和部分區域即使不入付費區也很有份量。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Praça do Império, Belém</span></div>
+                <div><span class="label">買飛</span><span>付費 cloister 建議預先買 timed ticket</span></div>
+                <div><span class="label">評價</span><span>建築細節很強；熱門時段排隊長</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Mosteiro+dos+Jer%C3%B3nimos+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://www.patrimoniocultural.gov.pt/en/monuments/mosteiro-dos-jeronimos/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="belem" data-title="Pastéis de Belém" data-lat="38.6975" data-lng="-9.2033" data-priority="good">
+              <div class="badge-row"><span class="badge good">推薦</span><span class="badge">食</span></div>
+              <h4>Pastéis de Belém</h4>
+              <p>經典葡撻店。外賣隊和堂食隊分開，堂食有時反而流動得快。適合接在 Jerónimos 前後。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Rua de Belém 84-92</span></div>
+                <div><span class="label">買飛</span><span>不用</span></div>
+                <div><span class="label">評價</span><span>遊客很多，但第一次來仍值得試</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Past%C3%A9is+de+Bel%C3%A9m" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://pasteisdebelem.pt/en/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="belem" data-title="Padrão dos Descobrimentos" data-lat="38.6936" data-lng="-9.2057" data-priority="good">
+              <div class="badge-row"><span class="badge good">推薦</span><span class="badge">外觀已足夠</span></div>
+              <h4>Padrão dos Descobrimentos</h4>
+              <p>河邊大型紀念碑，位置好，很適合連接 Jerónimos 和 Belém Tower。時間充裕才上觀景台。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Av. Brasília</span></div>
+                <div><span class="label">買飛</span><span>外觀不用；上觀景台才買</span></div>
+                <div><span class="label">評價</span><span>外部和河景比內部更重要</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Padr%C3%A3o+dos+Descobrimentos+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://padraodosdescobrimentos.pt/en/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="belem" data-title="Belém Tower" data-lat="38.6916" data-lng="-9.2160" data-priority="must">
+              <div class="badge-row"><span class="badge must">必去外觀</span><span class="badge optional">入內可選</span></div>
+              <h4>Belém Tower</h4>
+              <p>Lisbon icon。外觀、河邊位置和拍照價值很高；入內空間較小，要不要買 timed ticket 視乎你對 fortress 有幾大興趣。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Av. Brasília, Belém</span></div>
+                <div><span class="label">買飛</span><span>入內才要；建議預先買 timed ticket</span></div>
+                <div><span class="label">評價</span><span>外觀高 ROI；內部常見評價是細和排隊</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Torre+de+Bel%C3%A9m+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://www.patrimoniocultural.gov.pt/en/monuments/torre-de-belem/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <article class="cluster" id="baixa">
+          <div class="cluster-copy">
+            <h3>2. Baixa / Chiado</h3>
+            <p>Lisbon historic centre。由 Praça do Comércio 入城，穿過 Rua Augusta，到 Rossio，再上 Carmo / Chiado，最後可以去 São Pedro de Alcantara 看黃昏。</p>
+            <div class="route">
+              <span class="pill">Metro Baixa-Chiado</span>
+              <span class="pill">Cais do Sodré</span>
+              <span class="pill">市中心 walk</span>
+            </div>
+            <div class="map-shell" style="margin-top: 16px;">
+              <div id="map-baixa" class="leaflet-map cluster-map" data-map="baixa" role="img" aria-label="Baixa and Chiado interactive map"></div>
+              <div class="map-fallback"><a href="https://www.openstreetmap.org/#map=15/38.7110/-9.1400" target="_blank" rel="noopener">Open Baixa / Chiado on OpenStreetMap</a></div>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="attraction" data-cluster="baixa" data-title="Praça do Comércio" data-lat="38.7075" data-lng="-9.1364" data-priority="must">
+              <div class="badge-row"><span class="badge must">必去</span><span class="badge">免費</span></div>
+              <h4>Praça do Comércio</h4>
+              <p>面向 Tagus 河的大廣場，適合作為 Lisbon 市中心開場。經 Rua Augusta Arch 走入 Baixa 很順。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Praça do Comércio</span></div>
+                <div><span class="label">買飛</span><span>不用</span></div>
+                <div><span class="label">評價</span><span>空間感強，日落前後很漂亮</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Pra%C3%A7a+do+Com%C3%A9rcio+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="baixa" data-title="Carmo Convent" data-lat="38.7121" data-lng="-9.1404" data-priority="must">
+              <div class="badge-row"><span class="badge must">推薦入內</span><span class="badge">Walk-in</span></div>
+              <h4>Carmo Convent</h4>
+              <p>1755 大地震後留下的無頂 Gothic church ruins。時間成本不高，但很有記憶點。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Largo do Carmo</span></div>
+                <div><span class="label">買飛</span><span>通常 walk-in；留意星期日 / 節日開放</span></div>
+                <div><span class="label">評價</span><span>獨特、易看；不需要排很久</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Carmo+Convent+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://www.museuarqueologicodocarmo.pt/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="baixa" data-title="São Pedro de Alcântara Viewpoint" data-lat="38.7150" data-lng="-9.1447" data-priority="good">
+              <div class="badge-row"><span class="badge good">黃昏推薦</span><span class="badge">免費</span></div>
+              <h4>São Pedro de Alcântara</h4>
+              <p>望向 Castle 和 Baixa 的觀景台。很適合接在 Chiado / Bairro Alto 後，作為市中心黃昏收尾。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Rua de São Pedro de Alcântara</span></div>
+                <div><span class="label">買飛</span><span>不用</span></div>
+                <div><span class="label">評價</span><span>景觀好，位置方便</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Miradouro+de+S%C3%A3o+Pedro+de+Alc%C3%A2ntara" target="_blank" rel="noopener">Google Maps</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="baixa" data-title="Santa Justa Lift" data-lat="38.7122" data-lng="-9.1393" data-priority="skip">
+              <div class="badge-row"><span class="badge skip">低優先</span><span class="badge">外觀即可</span></div>
+              <h4>Santa Justa Lift</h4>
+              <p>建築外觀可以順路看，但不建議為排隊搭 lift 犧牲時間。從 Carmo 一帶本身已有高位視角。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Rua do Ouro</span></div>
+                <div><span class="label">買飛</span><span>不建議特登買</span></div>
+                <div><span class="label">評價</span><span>常被覺得排隊不值</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Santa+Justa+Lift+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <article class="cluster" id="alfama">
+          <div class="cluster-copy">
+            <h3>3. Alfama / Castelo / Graca</h3>
+            <p>最有 Lisbon feel 的區域：紅瓦屋頂、窄巷、斜坡、觀景台。最舒服做法係先搭車到高位，再慢慢向下走。</p>
+            <div class="route">
+              <span class="pill">先上 Castle</span>
+              <span class="pill">落山去 Alfama</span>
+              <span class="pill">避開中午 Tram 28</span>
+            </div>
+            <div class="map-shell" style="margin-top: 16px;">
+              <div id="map-alfama" class="leaflet-map cluster-map" data-map="alfama" role="img" aria-label="Alfama and Castle interactive map"></div>
+              <div class="map-fallback"><a href="https://www.openstreetmap.org/#map=15/38.7138/-9.1297" target="_blank" rel="noopener">Open Alfama / Castelo on OpenStreetMap</a></div>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="attraction" data-cluster="alfama" data-title="São Jorge Castle" data-lat="38.7139" data-lng="-9.1335" data-priority="must">
+              <div class="badge-row"><span class="badge must">必去</span><span class="badge">建議 online</span></div>
+              <h4>São Jorge Castle</h4>
+              <p>重點是城牆、位置和城市景觀，不是室內展品。適合早上先去，之後一路落山去 Alfama。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Rua de Santa Cruz do Castelo</span></div>
+                <div><span class="label">買飛</span><span>建議 online，旺季減少排隊風險</span></div>
+                <div><span class="label">評價</span><span>景觀好；正午會熱和多人</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Castelo+de+S%C3%A3o+Jorge+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://castelodesaojorge.pt/en/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="alfama" data-title="Portas do Sol" data-lat="38.7126" data-lng="-9.1300" data-priority="must">
+              <div class="badge-row"><span class="badge must">必去</span><span class="badge">免費</span></div>
+              <h4>Portas do Sol</h4>
+              <p>Alfama 紅瓦屋頂和河景的經典角度。和 Santa Luzia 相隔幾分鐘，兩個可以一起看。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Largo Portas do Sol</span></div>
+                <div><span class="label">買飛</span><span>不用</span></div>
+                <div><span class="label">評價</span><span>景很代表 Lisbon；人多時要顧好財物</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Miradouro+das+Portas+do+Sol+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="alfama" data-title="Santa Luzia Viewpoint" data-lat="38.7118" data-lng="-9.1305" data-priority="must">
+              <div class="badge-row"><span class="badge must">必去</span><span class="badge">免費</span></div>
+              <h4>Santa Luzia</h4>
+              <p>有 azulejo 磁磚、花架和 Alfama 景觀。比 Portas do Sol 更有庭園感。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Largo de Santa Luzia</span></div>
+                <div><span class="label">買飛</span><span>不用</span></div>
+                <div><span class="label">評價</span><span>拍照漂亮；熱門時段擠迫</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Miradouro+de+Santa+Luzia+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="alfama" data-title="Lisbon Cathedral" data-lat="38.7098" data-lng="-9.1335" data-priority="good">
+              <div class="badge-row"><span class="badge good">推薦</span><span class="badge">順路</span></div>
+              <h4>Lisbon Cathedral</h4>
+              <p>Lisbon 最重要的 cathedral，位於 Alfama 下方。若時間緊，外觀和附近街道已足夠。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Largo da Sé</span></div>
+                <div><span class="label">買飛</span><span>入部分區域才需要</span></div>
+                <div><span class="label">評價</span><span>歷史意義高；內部視乎興趣</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=S%C3%A9+de+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://www.sedelisboa.pt/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <article class="cluster" id="alcantara">
+          <div class="cluster-copy">
+            <h3>4. Alvito / Alcantara / Ajuda</h3>
+            <p>住宿附近用來排 arrival day 或離開日最合理。LX Factory、MAAT、Ajuda Palace 都比跨去東面輕鬆。</p>
+            <div class="route">
+              <span class="pill">近住宿</span>
+              <span class="pill">Bolt / Uber 回程方便</span>
+              <span class="pill">30 號半日候選</span>
+            </div>
+            <div class="map-shell" style="margin-top: 16px;">
+              <div id="map-alcantara" class="leaflet-map cluster-map" data-map="alcantara" role="img" aria-label="Alcantara and Ajuda interactive map"></div>
+              <div class="map-fallback"><a href="https://www.openstreetmap.org/#map=15/38.7040/-9.1870" target="_blank" rel="noopener">Open Alcantara / Ajuda on OpenStreetMap</a></div>
+            </div>
+          </div>
+          <div class="cards">
+            <article class="attraction" data-cluster="alcantara" data-title="Alvito / Alcantara Base" data-lat="38.7130" data-lng="-9.1830" data-priority="base">
+              <div class="badge-row"><span class="badge">住宿附近</span><span class="badge">公開安全版</span></div>
+              <h4>Alvito / Alcantara Base</h4>
+              <p>公開網頁只標示大約區域。這裡去 Belém、LX Factory、Ajuda 都順，但去 Alfama / Castle 就要預留交通時間。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Alvito / Alcantara area</span></div>
+                <div><span class="label">提醒</span><span>夜晚回程可考慮 Bolt / Uber，主要是省腳力</span></div>
+                <div><span class="label">地形</span><span>由河邊回住宿通常有上斜</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Alvito+Alc%C3%A2ntara+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="alcantara" data-title="LX Factory" data-lat="38.7032" data-lng="-9.1787" data-priority="good">
+              <div class="badge-row"><span class="badge good">推薦</span><span class="badge">近住宿</span></div>
+              <h4>LX Factory</h4>
+              <p>舊工業區改成餐廳、書店、設計小店和 creative spaces。不是 Lisbon top 5，但因為近住宿，很適合 27 號放鬆。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Rua Rodrigues de Faria 103</span></div>
+                <div><span class="label">買飛</span><span>不用</span></div>
+                <div><span class="label">評價</span><span>方便吃飯逛逛；偏 tourist-friendly</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=LX+Factory+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://lxfactory.com/en/homepage-en/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="alcantara" data-title="MAAT" data-lat="38.6955" data-lng="-9.1945" data-priority="good">
+              <div class="badge-row"><span class="badge good">推薦</span><span class="badge">建築 / 河邊</span></div>
+              <h4>MAAT</h4>
+              <p>即使不入館，外觀和河邊步道都值得。若對 contemporary art / architecture 有興趣，安排在 Belém 或 arrival day 很順。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Av. Brasília</span></div>
+                <div><span class="label">買飛</span><span>入展館才需要</span></div>
+                <div><span class="label">評價</span><span>建築外觀和河景常比展覽更穩陣</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=MAAT+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://www.maat.pt/en" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+
+            <article class="attraction" data-cluster="alcantara" data-title="Ajuda National Palace" data-lat="38.7079" data-lng="-9.1982" data-priority="optional">
+              <div class="badge-row"><span class="badge optional">可選</span><span class="badge">30 號半日</span></div>
+              <h4>Ajuda National Palace</h4>
+              <p>保存完整的 19 世紀皇宮 interiors。因為靠近住宿，很適合 30 號離開前排半日，前提是 FlixBus 時間許可。</p>
+              <div class="details">
+                <div><span class="label">地址</span><span>Largo da Ajuda</span></div>
+                <div><span class="label">買飛</span><span>通常不用搶，仍建議出發前查開放</span></div>
+                <div><span class="label">評價</span><span>內部豐富；不是第一次 Lisbon 絕對必去</span></div>
+              </div>
+              <div class="links">
+                <a href="https://www.google.com/maps/search/?api=1&query=Pal%C3%A1cio+Nacional+da+Ajuda+Lisboa" target="_blank" rel="noopener">Google Maps</a>
+                <a href="https://www.palacioajuda.gov.pt/" target="_blank" rel="noopener">Official</a>
+              </div>
+            </article>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="plan">
+      <div class="wrap">
+        <h2>27-30 Aug 骨架</h2>
+        <p class="section-intro">這不是逐分鐘行程，而是按地理和體力最合理的框架。30 號要按 FlixBus 站名和出發時間再收窄。</p>
+        <div class="timeline">
+          <article class="info-card">
+            <strong>27 Thu｜到步</strong>
+            <p>Check-in 後留在 Alcantara：LX Factory 食飯 / 逛逛，精神好就加 MAAT 河邊。</p>
+          </article>
+          <article class="info-card">
+            <strong>28 Fri｜Belém + Centre</strong>
+            <p>早上 Jerónimos，之後 Pastéis、Padrão、Belém Tower，下午接 Praça do Comércio、Baixa、Carmo、Chiado。</p>
+          </article>
+          <article class="info-card">
+            <strong>29 Sat｜Castle + Alfama</strong>
+            <p>早上先上 São Jorge Castle，再落 Portas do Sol、Santa Luzia、Alfama、Sé。星期六可看 Feira da Ladra。</p>
+          </article>
+          <article class="info-card">
+            <strong>30 Sun｜近住宿半日</strong>
+            <p>FlixBus 下午才走的話，可選 Ajuda Palace / 近河邊輕鬆 brunch。不要排太遠的景點。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Built as a static single-file HTML for GitHub Pages. Leaflet maps use OpenStreetMap tiles; attraction cards remain visible without JavaScript.
+    </div>
+  </footer>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script>
+    (function () {
+      if (!window.L) {
+        return;
+      }
+
+      var colors = {
+        must: "#b63b2d",
+        good: "#0e6b64",
+        optional: "#a76d16",
+        skip: "#5d564c",
+        base: "#236192"
+      };
+
+      var clusterCenters = {
+        overview: { center: [38.7078, -9.1668], zoom: 13 },
+        belem: { center: [38.6961, -9.2075], zoom: 15 },
+        baixa: { center: [38.7119, -9.1405], zoom: 15 },
+        alfama: { center: [38.7125, -9.1315], zoom: 15 },
+        alcantara: { center: [38.7044, -9.1880], zoom: 14 }
+      };
+
+      function getAttractions(clusterName) {
+        var selector = ".attraction[data-lat][data-lng]";
+        var nodes = Array.prototype.slice.call(document.querySelectorAll(selector));
+        if (clusterName !== "overview") {
+          nodes = nodes.filter(function (node) {
+            return node.dataset.cluster === clusterName;
+          });
+        }
+        return nodes.map(function (node) {
+          return {
+            title: node.dataset.title || node.querySelector("h4").textContent.trim(),
+            lat: Number(node.dataset.lat),
+            lng: Number(node.dataset.lng),
+            priority: node.dataset.priority || "good",
+            cluster: node.dataset.cluster || "",
+            card: node
+          };
+        }).filter(function (item) {
+          return Number.isFinite(item.lat) && Number.isFinite(item.lng);
+        });
+      }
+
+      function markerIcon(priority) {
+        var color = colors[priority] || colors.good;
+        return L.divIcon({
+          className: "",
+          html: '<span style="display:block;width:18px;height:18px;border-radius:50%;background:' + color + ';border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,.35);"></span>',
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+          popupAnchor: [0, -9]
+        });
+      }
+
+      function addMap(container) {
+        var mapName = container.dataset.map;
+        var config = clusterCenters[mapName];
+        if (!config) {
+          return;
+        }
+
+        var map = L.map(container, {
+          scrollWheelZoom: false,
+          tap: true
+        }).setView(config.center, config.zoom);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var points = getAttractions(mapName);
+        var bounds = [];
+        points.forEach(function (point) {
+          var marker = L.marker([point.lat, point.lng], { icon: markerIcon(point.priority) }).addTo(map);
+          var link = point.card.querySelector('.links a[href*="google.com/maps"]');
+          var popup = '<div class="popup-title">' + point.title + '</div>' +
+            '<div class="popup-meta">' + point.cluster + '</div>';
+          if (link) {
+            popup += '<div style="margin-top:8px;"><a href="' + link.href + '" target="_blank" rel="noopener">Open in Google Maps</a></div>';
+          }
+          marker.bindPopup(popup);
+          bounds.push([point.lat, point.lng]);
+        });
+
+        if (bounds.length > 1) {
+          map.fitBounds(bounds, { padding: [34, 34], maxZoom: config.zoom });
+        }
+
+        setTimeout(function () {
+          map.invalidateSize();
+        }, 120);
+
+        container.closest(".map-shell").classList.add("map-ready");
+      }
+
+      Array.prototype.slice.call(document.querySelectorAll("[data-map]")).forEach(addMap);
+    })();
+  </script>
+</body>
+</html>
