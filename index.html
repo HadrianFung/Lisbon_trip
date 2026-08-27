@@ -8,7 +8,7 @@
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIINfQPDnrzQ+hmK7t2ATwNERVv+fef9tus="
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   >
   <style>
@@ -527,7 +527,7 @@
     <section id="overview">
       <div class="wrap">
         <h2>Lisbon Overview Map</h2>
-          <p class="section-intro">如果地圖正常載入，你會見到所有景點 marker。底圖使用 OpenStreetMap 資料的 CARTO tile layer，不需要 API key。若 Safari / CDN 暫時載不到，下面每個 cluster 同景點卡仍然照常顯示，並保留 Google Maps 連結。</p>
+        <p class="section-intro">如果地圖正常載入，你會見到所有景點 marker。底圖直接使用 OpenStreetMap 標準圖磚，不需要 API key。若 Safari / CDN 暫時載不到，下面每個 cluster 同景點卡仍然照常顯示，並保留 Google Maps 連結。</p>
         <div class="map-shell">
           <div id="overview-map" class="leaflet-map" data-map="overview" role="img" aria-label="Lisbon overview interactive map"></div>
           <div class="map-fallback">
@@ -923,7 +923,7 @@
 
   <footer>
     <div class="wrap">
-      Built as a static single-file HTML for GitHub Pages. Leaflet maps use OpenStreetMap-based CARTO tiles; attraction cards remain visible without JavaScript.
+      Built as a static single-file HTML for GitHub Pages. Leaflet maps use standard OpenStreetMap tiles; attraction cards remain visible without JavaScript.
     </div>
   </footer>
 
@@ -999,9 +999,9 @@
           tap: true
         }).setView(config.center, config.zoom);
 
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 19,
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
         var points = getAttractions(mapName);
