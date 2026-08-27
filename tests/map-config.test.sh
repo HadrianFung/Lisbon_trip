@@ -6,6 +6,9 @@ page="$(dirname "$0")/../index.html"
 grep -Fq 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=' "$page"
 grep -Fq 'https://tile.openstreetmap.org/{z}/{x}/{y}.png' "$page"
 grep -Fq 'OpenStreetMap</a> contributors' "$page"
+grep -Fq 'map.locate({' "$page"
+grep -Fq 'locationfound' "$page"
+grep -Fq 'locationerror' "$page"
 
 if grep -Fq 'basemaps.cartocdn.com' "$page"; then
   echo "CARTO tile URL must not be present" >&2
@@ -14,5 +17,8 @@ fi
 
 map_count="$(grep -c 'class="leaflet-map' "$page")"
 test "$map_count" -eq 5
+
+terrain_figure_count="$(grep -c '<figure class="terrain-figure">' "$page")"
+test "$terrain_figure_count" -eq 2
 
 echo "Map configuration checks passed"

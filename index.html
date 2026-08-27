@@ -195,6 +195,7 @@
     section {
       padding: 34px 0;
       border-top: 1px solid rgba(222, 213, 201, 0.7);
+      scroll-margin-top: 64px;
     }
 
     .section-intro {
@@ -261,6 +262,85 @@
     .dot.blue { background: var(--blue); }
     .dot.gold { background: var(--gold); }
     .dot.green { background: var(--green); }
+    .dot.location {
+      background: #1479c9;
+      box-shadow: 0 0 0 3px rgba(20, 121, 201, 0.16);
+    }
+
+    .terrain-figures {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .terrain-figure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 6px 18px rgba(37, 31, 24, 0.07);
+    }
+
+    .terrain-canvas {
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+    }
+
+    .terrain-figure svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 12 / 5;
+      background: #f4f1ea;
+    }
+
+    .terrain-figure figcaption {
+      padding: 12px 14px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .terrain-figure figcaption strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .terrain-svg text {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .terrain-svg .contour {
+      fill: none;
+      stroke: rgba(76, 122, 52, 0.38);
+      stroke-width: 2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .terrain-svg .guide {
+      fill: none;
+      stroke: rgba(93, 86, 76, 0.48);
+      stroke-width: 1.5;
+      stroke-dasharray: 5 5;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .terrain-svg .zone-label {
+      fill: #221f1b;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .terrain-svg .minor-label {
+      fill: #5d564c;
+      font-size: 12px;
+      font-weight: 650;
+    }
 
     .grid {
       display: grid;
@@ -431,6 +511,60 @@
       font-size: 13px;
     }
 
+    .location-control.leaflet-bar {
+      border: 0;
+      box-shadow: 0 2px 10px rgba(37, 31, 24, 0.2);
+    }
+
+    .leaflet-control-locate {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 0;
+      border-radius: 4px;
+      background: #fff;
+      color: #174f7a;
+      cursor: pointer;
+      font: 700 23px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    .leaflet-control-locate:hover {
+      background: #f2f6f8;
+    }
+
+    .leaflet-control-locate:focus-visible {
+      outline: 3px solid rgba(20, 121, 201, 0.42);
+      outline-offset: 2px;
+    }
+
+    .leaflet-control-locate.is-locating {
+      color: var(--red);
+      animation: locate-pulse 1s ease-in-out infinite alternate;
+    }
+
+    .current-location-dot {
+      display: block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: #1479c9;
+      box-shadow: 0 0 0 3px rgba(20, 121, 201, 0.24), 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes locate-pulse {
+      from { opacity: 0.5; }
+      to { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .leaflet-control-locate.is-locating {
+        animation: none;
+      }
+    }
+
     @media (max-width: 860px) {
       .hero-grid,
       .cluster {
@@ -438,7 +572,8 @@
       }
 
       .grid,
-      .timeline {
+      .timeline,
+      .terrain-figures {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -467,12 +602,17 @@
         min-height: 0;
       }
 
+      section {
+        scroll-margin-top: 112px;
+      }
+
       .hero {
         padding-top: 30px;
       }
 
       .grid,
-      .timeline {
+      .timeline,
+      .terrain-figures {
         grid-template-columns: 1fr;
       }
 
@@ -484,6 +624,11 @@
 
       .leaflet-map {
         min-height: 310px;
+      }
+
+      .terrain-canvas svg {
+        width: 620px;
+        max-width: none;
       }
     }
   </style>
@@ -539,6 +684,7 @@
             <span><span class="dot"></span>推薦</span>
             <span><span class="dot gold"></span>可選</span>
             <span><span class="dot blue"></span>交通 / 住宿</span>
+            <span><span class="dot location"></span>目前位置</span>
           </div>
         </div>
       </div>
@@ -548,6 +694,85 @@
       <div class="wrap">
         <h2>地形概念</h2>
         <p class="section-intro">Lisbon 唔係平地城市。南面係 Tagus 河，Baixa 係低地，Chiado / Bairro Alto 向西上山，Alfama / Castelo / Graca 向東上山。住 Alvito / Alcantara 即係偏西、近 Belém，但回家最後一段多數會上斜。</p>
+        <div class="terrain-figures">
+          <figure class="terrain-figure">
+            <div class="terrain-canvas" tabindex="0" aria-label="地形概念剖面，可左右捲動查看">
+            <svg class="terrain-svg" viewBox="0 0 720 300" role="img" aria-labelledby="profile-title profile-desc">
+              <title id="profile-title">Lisbon 河邊低地與山丘概念剖面</title>
+              <desc id="profile-desc">由西面的 Belém 和 Alcantara 河邊低地，經 Ajuda 和 Chiado 山坡、Baixa 谷地，再上 Castelo 和 Graca 高位的概念高度圖。</desc>
+              <rect width="720" height="300" fill="#f4f1ea"/>
+              <rect y="242" width="720" height="58" fill="#cfe7ec"/>
+              <path d="M0 230 L70 216 L150 218 L225 128 L290 164 L355 130 L430 215 L505 176 L585 90 L652 133 L720 194 L720 242 L0 242 Z" fill="#dce8d4"/>
+              <path d="M0 230 L70 216 L150 218 L225 128 L290 164 L355 130 L430 215 L505 176 L585 90 L652 133 L720 194" class="contour" stroke="#4c7a34" stroke-width="3"/>
+              <path d="M18 239 C115 224 165 235 230 148 S340 154 426 227 S525 175 586 108 S663 151 705 207" class="contour"/>
+              <path d="M20 250 C130 234 180 247 241 169 S350 176 430 240 S538 197 592 132 S660 171 700 224" class="contour"/>
+              <line x1="0" y1="242" x2="720" y2="242" stroke="#7aaeb9" stroke-width="2"/>
+              <text x="18" y="281" class="minor-label">Tagus 河面 / 河邊走廊</text>
+              <line x1="90" y1="210" x2="90" y2="174" class="guide"/>
+              <text x="46" y="163" class="zone-label">Belém</text>
+              <text x="36" y="180" class="minor-label">平坦河岸</text>
+              <line x1="160" y1="212" x2="160" y2="187" class="guide"/>
+              <text x="116" y="177" class="zone-label">Alcântara</text>
+              <line x1="225" y1="128" x2="225" y2="78" class="guide"/>
+              <text x="199" y="65" class="zone-label">Ajuda</text>
+              <text x="186" y="83" class="minor-label">住宿上坡</text>
+              <line x1="355" y1="130" x2="355" y2="82" class="guide"/>
+              <text x="303" y="68" class="zone-label">Chiado / Bairro Alto</text>
+              <line x1="430" y1="215" x2="430" y2="170" class="guide"/>
+              <text x="408" y="157" class="zone-label">Baixa</text>
+              <text x="399" y="174" class="minor-label">中央谷地</text>
+              <line x1="585" y1="90" x2="585" y2="44" class="guide"/>
+              <text x="530" y="31" class="zone-label">Castelo / Graca</text>
+              <text x="549" y="49" class="minor-label">高位山丘</text>
+              <line x1="652" y1="133" x2="652" y2="105" class="guide"/>
+              <text x="626" y="93" class="zone-label">Alfama</text>
+              <text x="590" y="286" class="minor-label">概念高度，不按比例</text>
+            </svg>
+            </div>
+            <figcaption><strong>概念剖面</strong>河岸同 Baixa 較低；Ajuda、Chiado、Castelo、Graca 都要預上斜。</figcaption>
+          </figure>
+
+          <figure class="terrain-figure">
+            <div class="terrain-canvas" tabindex="0" aria-label="景點分區俯視圖，可左右捲動查看">
+            <svg class="terrain-svg" viewBox="0 0 720 300" role="img" aria-labelledby="zones-title zones-desc">
+              <title id="zones-title">Lisbon 景點分區與坡向示意</title>
+              <desc id="zones-desc">西面 Belém 與 Alcantara、中央 Baixa 與 Chiado、東面 Alfama 與 Castelo Graca 的大約分布，南面為 Tagus 河。</desc>
+              <rect width="720" height="300" fill="#f4f1ea"/>
+              <rect y="238" width="720" height="62" fill="#cfe7ec"/>
+              <path d="M0 228 C105 214 164 232 250 220 S414 230 520 214 S642 226 720 208" fill="none" stroke="#7aaeb9" stroke-width="3"/>
+              <path d="M35 164 C80 127 152 130 185 166 C163 211 82 224 34 204 Z" fill="#d7e7cc" stroke="#9db58d" stroke-width="2"/>
+              <path d="M178 142 C223 110 292 121 322 165 C302 213 228 226 181 203 Z" fill="#d8e8df" stroke="#8cad9d" stroke-width="2"/>
+              <path d="M320 157 C359 129 417 132 449 164 L444 220 L328 221 Z" fill="#f0e0b8" stroke="#c8a866" stroke-width="2"/>
+              <path d="M337 83 C383 58 443 71 466 116 L446 163 C406 137 364 139 320 157 Z" fill="#e5d8c8" stroke="#b59d80" stroke-width="2"/>
+              <path d="M446 151 C489 119 547 124 578 160 L568 218 L446 220 Z" fill="#ead8cc" stroke="#bd9a83" stroke-width="2"/>
+              <path d="M474 61 C532 31 616 46 657 97 L578 160 C544 124 492 121 446 151 Z" fill="#d9d2e6" stroke="#9a8caf" stroke-width="2"/>
+              <text x="83" y="177" class="zone-label">Belém</text>
+              <text x="64" y="195" class="minor-label">河邊景點</text>
+              <text x="212" y="166" class="zone-label">Alcântara</text>
+              <text x="211" y="184" class="minor-label">住宿基地</text>
+              <text x="359" y="184" class="zone-label">Baixa</text>
+              <text x="352" y="202" class="minor-label">市中心低地</text>
+              <text x="352" y="105" class="zone-label">Chiado</text>
+              <text x="347" y="123" class="minor-label">西面山坡</text>
+              <text x="486" y="180" class="zone-label">Alfama</text>
+              <text x="481" y="198" class="minor-label">東面斜坡</text>
+              <text x="512" y="80" class="zone-label">Castelo / Graca</text>
+              <text x="539" y="98" class="minor-label">東面高位</text>
+              <path d="M394 151 L394 118" class="guide"/>
+              <path d="M390 123 L394 116 L398 123" fill="none" stroke="#5d564c" stroke-width="2"/>
+              <path d="M524 151 L548 111" class="guide"/>
+              <path d="M540 116 L550 108 L550 121" fill="none" stroke="#5d564c" stroke-width="2"/>
+              <path d="M250 145 L272 111" class="guide"/>
+              <path d="M264 116 L274 108 L274 121" fill="none" stroke="#5d564c" stroke-width="2"/>
+              <text x="18" y="282" class="minor-label">西面</text>
+              <text x="314" y="282" class="zone-label">Tagus 河</text>
+              <text x="664" y="282" class="minor-label">東面</text>
+              <text x="18" y="25" class="minor-label">箭嘴 = 主要上坡方向</text>
+            </svg>
+            </div>
+            <figcaption><strong>分區俯視</strong>西面河岸、中央谷地、東面山城分開玩；高位先到，再向河邊落山。</figcaption>
+          </figure>
+        </div>
         <div class="grid">
           <article class="info-card">
             <strong>Belém / Alcantara</strong>
@@ -987,6 +1212,93 @@
         });
       }
 
+      function currentLocationIcon() {
+        return L.divIcon({
+          className: "",
+          html: '<span class="current-location-dot" aria-hidden="true"></span>',
+          iconSize: [18, 18],
+          iconAnchor: [9, 9],
+          popupAnchor: [0, -10]
+        });
+      }
+
+      function addLocationControl(map) {
+        var locationMarker;
+        var accuracyCircle;
+        var button;
+        var control = L.control({ position: "topleft" });
+
+        control.onAdd = function () {
+          var wrapper = L.DomUtil.create("div", "leaflet-bar location-control");
+          button = L.DomUtil.create("button", "leaflet-control-locate", wrapper);
+          button.type = "button";
+          button.title = "顯示目前位置";
+          button.setAttribute("aria-label", "顯示目前位置");
+          button.innerHTML = '<span aria-hidden="true">⌖</span>';
+
+          L.DomEvent.disableClickPropagation(wrapper);
+          L.DomEvent.disableScrollPropagation(wrapper);
+          L.DomEvent.on(button, "click", function (event) {
+            L.DomEvent.preventDefault(event);
+            button.classList.add("is-locating");
+            button.title = "正在定位";
+            button.setAttribute("aria-label", "正在定位");
+            map.locate({
+              setView: true,
+              maxZoom: 16,
+              enableHighAccuracy: true,
+              timeout: 12000,
+              maximumAge: 30000
+            });
+          });
+
+          return wrapper;
+        };
+
+        map.on("locationfound", function (event) {
+          var accuracy = Math.max(1, Math.round(event.accuracy));
+          button.classList.remove("is-locating");
+          button.title = "重新定位";
+          button.setAttribute("aria-label", "重新定位");
+
+          if (locationMarker) {
+            locationMarker.setLatLng(event.latlng);
+            accuracyCircle.setLatLng(event.latlng).setRadius(accuracy);
+          } else {
+            accuracyCircle = L.circle(event.latlng, {
+              radius: accuracy,
+              color: "#1479c9",
+              fillColor: "#1479c9",
+              fillOpacity: 0.08,
+              weight: 1.5,
+              interactive: false
+            }).addTo(map);
+            locationMarker = L.marker(event.latlng, {
+              icon: currentLocationIcon(),
+              zIndexOffset: 1000
+            }).addTo(map);
+          }
+
+          locationMarker.bindPopup(
+            '<div class="popup-title">你目前位置</div>' +
+            '<div class="popup-meta">準確範圍約 ±' + accuracy + ' 米</div>'
+          ).openPopup();
+        });
+
+        map.on("locationerror", function (event) {
+          var denied = event.code === 1;
+          var message = denied
+            ? "定位權限被拒絕。請在瀏覽器網站設定允許位置。"
+            : "暫時搵唔到位置，請稍後再試。";
+          button.classList.remove("is-locating");
+          button.title = "定位失敗，按此重試";
+          button.setAttribute("aria-label", "定位失敗，按此重試");
+          L.popup().setLatLng(map.getCenter()).setContent(message).openOn(map);
+        });
+
+        control.addTo(map);
+      }
+
       function addMap(container) {
         var mapName = container.dataset.map;
         var config = clusterCenters[mapName];
@@ -1003,6 +1315,8 @@
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
+
+        addLocationControl(map);
 
         var points = getAttractions(mapName);
         var bounds = [];
